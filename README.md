@@ -52,8 +52,8 @@ Configure the following environment variables in your Lambda function:
 
 | Variable Name             | Description                               | Example Value          |
 |---------------------------|-------------------------------------------|------------------------|
-| `BUCKET_NAME`             | S3 Bucket Name                            | `test-delele-me-1234321` |
-| `OBJECT_KEY`              | Default S3 Object Key                     | `index.html`           |
+| `BUCKET_NAME`             | S3 Bucket Name                            | `abc-s3-bucket` |
+| `OBJECT_KEY`              | Default S3 Object Key                     | `test.pdf`           |
 | `AWS_ACCESS_KEY_PARAM`    | SSM Parameter for Access Key              | `s3-presigned-credentials-access_key` |
 | `AWS_SECRET_KEY_PARAM`    | SSM Parameter for Secret Key              | `s3-presigned-credentials-secret_key` |
 | `PRESIGNED_URL_EXPIRATION`| URL Expiration in Seconds (7 days = 604800)| `604800`               |
