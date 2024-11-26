@@ -134,10 +134,4 @@ Successful invocation returns:
 4. Push to the branch
 5. Create a pull request
 
-## License
 
-[Specify your license here]
-
-## Contact
-
-[Your contact information or support channel]
