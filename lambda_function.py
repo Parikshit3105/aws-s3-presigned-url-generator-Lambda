@@ -1,7 +1,7 @@
 import boto3
 import os
 import json
-from botocore.exceptions import NoCredentialsError, PartialCredentialsError
+from botocore.exceptions import NoCredentialsError, PartialCredentialsError, ClientError
 from datetime import datetime, timedelta
 
 def get_parameter_value(ssm_client, parameter_name):
@@ -17,6 +17,7 @@ def get_parameter_value(ssm_client, parameter_name):
 def lambda_handler(event, context):
     """
     Lambda function to generate a presigned URL for an S3 object with structured output.
+    Includes specific handling for files not found in S3.
     """
     # Fetch bucket name and object key from environment variables
     bucket_name = os.getenv('BUCKET_NAME')
@@ -67,6 +68,23 @@ def lambda_handler(event, context):
             aws_access_key_id=access_key,
             aws_secret_access_key=secret_key
         )
+
+        # Check if the object exists before generating presigned URL
+        try:
+            s3_client.head_object(Bucket=bucket_name, Key=object_key)
+        except s3_client.exceptions.ClientError as e:
+            # If the object does not exist, return a specific error
+            if e.response['Error']['Code'] == '404':
+                return {
+                    "statusCode": 404,
+                    "body": {
+                        "error": f"File not found: {object_key} does not exist in bucket {bucket_name}",
+                        "presigned_url": None,
+                        "expiration_time": None
+                    }
+                }
+            # Re-raise other ClientErrors
+            raise
 
         # Generate the presigned URL
         presigned_url = s3_client.generate_presigned_url(
